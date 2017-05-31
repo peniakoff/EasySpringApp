@@ -23,7 +23,7 @@ public class MainController {
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
     public String home(@PathVariable("ticketId") int id) {
-        Optional ticket = ticketRepository.findOne(id); //Optional for exceptions management
+        Optional<Ticket> ticket = ticketRepository.findOne(id); //Optional for exceptions management
         if (ticket.isPresent()) {
             return "The message form the DB is: " + ticket.get().getMessage(); //it returns the message with ID in the url
         }
