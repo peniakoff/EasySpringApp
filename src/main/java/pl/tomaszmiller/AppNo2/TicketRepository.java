@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import pl.tomaszmiller.AppNo2.models.Ticket;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,5 +14,6 @@ import java.util.Optional;
 public interface TicketRepository extends CrudRepository<Ticket, Integer> {
 
     Optional<Ticket> findOne(int id); //overwrite the findOne method
+    List<Ticket> findByAuthor(String author);
 
 }

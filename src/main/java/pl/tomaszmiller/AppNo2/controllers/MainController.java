@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pl.tomaszmiller.AppNo2.TicketRepository;
 import pl.tomaszmiller.AppNo2.models.Ticket;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Peniakoff on 31.05.2017.
@@ -23,11 +25,18 @@ public class MainController {
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
     public String home(@PathVariable("ticketId") int id) {
-        Optional<Ticket> ticket = ticketRepository.findOne(id); //Optional for exceptions management
-        if (ticket.isPresent()) {
-            return "The message form the DB is: " + ticket.get().getMessage(); //it returns the message with ID in the url
-        }
-        return "Wrong ID used!";
+
+//        Optional<Ticket> ticket = ticketRepository.findOne(id); //Optional for exceptions management
+//        if (ticket.isPresent()) {
+//            return "The message form the DB is: " + ticket.get().getMessage(); //it returns the message with ID in the url
+//        }
+
+        List<Ticket> tickets = ticketRepository.findByAuthor("Tomasz M.");
+
+        return tickets.stream().map(s -> s.getMessage()).collect(
+                Collectors.joining(", ", "Tickety: ", ""));
+
+//        return "Wrong ID used!";
     }
 
 
