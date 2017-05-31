@@ -24,19 +24,49 @@ public class MainController {
 
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
-    public String home(@PathVariable("ticketId") int id) {
+    public String messageId(@PathVariable("ticketId") int id) {
 
-//        Optional<Ticket> ticket = ticketRepository.findOne(id); //Optional for exceptions management
-//        if (ticket.isPresent()) {
-//            return "The message form the DB is: " + ticket.get().getMessage(); //it returns the message with ID in the url
-//        }
+        Optional<Ticket> ticket = ticketRepository.findOne(id); //Optional for exceptions management
+        if (ticket.isPresent()) {
+            return "The message form the DB is: " + ticket.get().getMessage(); //it returns the message with ID in the url
+        }
+
+        return "Wrong ID used!";
+    }
+
+    @RequestMapping(value = "/author", method = RequestMethod.GET)
+    @ResponseBody
+    public String messageAuthor() {
 
         List<Ticket> tickets = ticketRepository.findByAuthor("Tomasz M.");
 
-        return tickets.stream().map(s -> s.getMessage()).collect(
-                Collectors.joining(", ", "Tickety: ", ""));
 
-//        return "Wrong ID used!";
+        String message = "Tomasz M.'s tickets: ";
+        for (Ticket ticket : tickets) {
+            message += ticket.getMessage() + ", ";
+        }
+
+        return message;
+
+//        return tickets.stream().map(s -> s.getMessage()).collect(
+//                Collectors.joining(", ", "Tickety: ", ""));
+
+    }
+
+
+    @RequestMapping(value = "/message/{prefix}", method = RequestMethod.GET)
+    @ResponseBody
+    public String messagePrefix(@PathVariable("prefix") String prefixString) {
+
+        List<Ticket> tickets = ticketRepository.findByMessageLike(prefixString + "%"); //Optional for exceptions management
+
+        String message = "Tickets started from " + prefixString + ": ";
+        for (Ticket ticket : tickets) {
+            message += ticket.getMessage() + ", ";
+        }
+
+        return message;
+
     }
 
 
