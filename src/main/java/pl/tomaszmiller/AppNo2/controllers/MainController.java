@@ -1,15 +1,23 @@
 package pl.tomaszmiller.AppNo2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.tomaszmiller.AppNo2.MailService;
 import pl.tomaszmiller.AppNo2.TicketRepository;
 import pl.tomaszmiller.AppNo2.UserRepository;
 import pl.tomaszmiller.AppNo2.models.Ticket;
+import pl.tomaszmiller.AppNo2.models.User;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +33,9 @@ public class MainController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    MailService mailService;
 
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
@@ -77,8 +88,71 @@ public class MainController {
     @ResponseBody
     public String user() {
 
+//        User user = userRepository.findOne(183);
+//        return "Czas: " + user.getDatetime().toString();
 
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date date1 = null;
+//        Date date2 = null;
+//        try {
+//            date1 = dateFormat.parse("2017-04-12 16:00:00");
+//            date2 = dateFormat.parse("2017-06-14 16:00:00");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        List<User> users = userRepository.findByDatetimeBetween(date1, date2);
 
+//        List<User> users = userRepository.findByUsernameContainingAndIdGreaterThan("tam", 180);
+
+//        List<User> users = userRepository.findByRole("ADMIN");
+
+//        return users.stream().map(s -> s.getUsername()).collect(Collectors.joining(" , ", "Role: ", ""));
+
+        Page<User> currentPage = userRepository.findAll(new PageRequest(0, 4)); //we are looking for page No. 0 and its size is 4; KEY CLASS
+        StringBuilder builder = new StringBuilder();
+
+        for (User user : currentPage.getContent()) {
+            builder.append("Username: " + user.getUsername() + "<br />");
+        }
+
+        builder.append("Liczba stron: " + currentPage.getTotalPages() + "<br />");
+        builder.append("Czy zawiera następną stronę? " + currentPage.hasNext() + "<br />");
+        builder.append("Czy zawiera poprzednią stronę? " + currentPage.hasPrevious() + "<br />");
+
+        currentPage = userRepository.findAll(currentPage.nextPageable());
+
+        builder.append("------------------<br />");
+
+        for (User user : currentPage.getContent()) {
+            builder.append("Username: " + user.getUsername() + "<br />");
+        }
+
+        builder.append("Liczba stron: " + currentPage.getTotalPages() + "<br />");
+        builder.append("Czy zawiera następną stronę? " + currentPage.hasNext() + "<br />");
+        builder.append("Czy zawiera poprzednią stronę? " + currentPage.hasPrevious() + "<br />");
+        builder.append("------------------<br />");
+
+        currentPage = userRepository.findAll(currentPage.nextPageable());
+
+        for (User user : currentPage.getContent()) {
+            builder.append("Username: " + user.getUsername() + "<br />");
+        }
+
+        builder.append("Liczba stron: " + currentPage.getTotalPages() + "<br />");
+        builder.append("Czy zawiera następną stronę? " + currentPage.hasNext() + "<br />");
+        builder.append("Czy zawiera poprzednią stronę? " + currentPage.hasPrevious() + "<br />");
+        builder.append("------------------<br />");
+
+        return builder.toString();
+
+    }
+
+    @RequestMapping(value = "/mail", method = RequestMethod.GET)
+    @ResponseBody
+    public String email() {
+        mailService.sendMail("gefreiter@windowslive.com", "Taka przykłądowa wiadomość.", "Wiadomość testowa");
+        return "Wysłano maila";
     }
 
 }
