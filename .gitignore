@@ -26,3 +26,4 @@ nbdist/
 /src/main/resources/application.properties
 classes/
 src/main/resources/
+!/src/main/resources/templates/
