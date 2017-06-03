@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.tomaszmiller.AppNo2.TicketRepository;
+import pl.tomaszmiller.AppNo2.UserRepository;
 import pl.tomaszmiller.AppNo2.models.Ticket;
 
 import java.util.List;
@@ -21,6 +22,9 @@ public class MainController {
 
     @Autowired
     TicketRepository ticketRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
@@ -69,5 +73,12 @@ public class MainController {
 
     }
 
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ResponseBody
+    public String user() {
+
+
+
+    }
 
 }
