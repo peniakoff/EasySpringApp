@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import pl.tomaszmiller.AppNo2.MailService;
 import pl.tomaszmiller.AppNo2.TicketRepository;
 import pl.tomaszmiller.AppNo2.UserRepository;
@@ -36,6 +38,9 @@ public class MainController {
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    TemplateEngine templateEngine;
 
     @RequestMapping(value = "/{ticketId}", method = RequestMethod.GET)
     @ResponseBody
@@ -148,10 +153,16 @@ public class MainController {
 
     }
 
-    @RequestMapping(value = "/mail", method = RequestMethod.GET)
+    @RequestMapping(value = "/mail/{cash}", method = RequestMethod.GET)
     @ResponseBody
-    public String email() {
-        mailService.sendMail("gefreiter@windowslive.com", "Taka przykłądowa wiadomość.", "Wiadomość testowa");
+    public String email(@PathVariable("cash") int cash) {
+        Context context = new Context();
+        context.setVariable("welcome", "Witaj, ktosiu!");
+        context.setVariable("message", "Teraz mi wisisz " + cash + "!");
+
+        String bodyHtml = templateEngine.process("mail", context);
+
+        mailService.sendMail("gefreiter@windowslive.com", bodyHtml, "Wiadomość testowa");
         return "Wysłano maila";
     }
 
