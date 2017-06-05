@@ -4,21 +4,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.*;
 import java.util.Date;
 
 /**
  * Created by Peniakoff on 03.06.2017.
  */
+@XmlRootElement(name = "User")
+@XmlAccessorType(XmlAccessType.NONE)
 @Entity
 public class User {
 
+    @XmlAttribute
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @XmlElement
     private String username;
+    @XmlElement
     private String password;
+    @XmlElement
     private String role;
+    @XmlElement
     private int gender;
+    @XmlElement
     private Date datetime;
 
     public User() {
@@ -30,6 +39,10 @@ public class User {
         this.role = role;
         this.gender = gender;
         this.datetime = datetime;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUsername() {
