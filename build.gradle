@@ -30,6 +30,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.5.3.RELEASE'
 // https://mvnrepository.com/artifact/net.sourceforge.nekohtml/nekohtml
     compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: '1.9.22'
-	runtime('mysql:mysql-connector-java')
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.8.8'
+    runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
