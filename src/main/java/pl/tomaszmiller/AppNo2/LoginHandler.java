@@ -1,5 +1,6 @@
 package pl.tomaszmiller.AppNo2;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -29,7 +30,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
         }
 
         if (isAdmin) {
-            response.sendRedirect("/admin");
+            response.sendRedirect("/administrator");
         } else {
             response.sendRedirect("/");
         }
