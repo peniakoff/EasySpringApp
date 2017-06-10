@@ -113,35 +113,13 @@ public class ApiController {
 
     }
 
-    @RequestMapping(value = "/checklogin/{login}/{password}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public String checkLogin(@PathVariable("login") String login,
-                             @PathVariable("password") String password) {
-        if ((login.isEmpty() && login == null) || (password.isEmpty() || password == null)) {
-            return "null except";
-        }
-        Optional<User> userLocal = userRepository.findByUsername(login);
-        if (userLocal.isPresent()) {
-            if (userLocal.get().getPassword().equals(password)) {
-                return "OK";
-            }
-        }
-        return "BAD";
-    }
-
+    // dynamic URLs
     @RequestMapping(value = "/tomasz/**", method = RequestMethod.GET)
     @ResponseBody
-    public String test(HttpServletRequest servletRequest) throws Exception {
+    public String tomaszGet(HttpServletRequest servletRequest) throws Exception {
         String path = (String) servletRequest.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        String[] split = path.split("/");
-        return "Pozostały path to: " + path;
-    }
-
-    @RequestMapping(value = "/tom/**", method = RequestMethod.GET)
-    @ResponseBody
-    public String test2(@RequestParam(value = "login", required = true) String login,
-                        @RequestParam("password") String password) {
-        return "Login: " + login;
+        //String[] split = path.split("/");
+        return "Path to: " + path;
     }
 
 }
