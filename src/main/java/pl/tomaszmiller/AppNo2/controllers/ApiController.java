@@ -6,10 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.HandlerMapping;
 import pl.tomaszmiller.AppNo2.UserRepository;
 import pl.tomaszmiller.AppNo2.models.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.logging.Handler;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -72,5 +75,73 @@ public class ApiController {
 //        Iterable<User> users = userRepository.findAll();
 //        return new ResponseEntity(users, HttpStatus.OK);
 //    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity saveUser(@RequestBody User user,
+                                   @RequestHeader("Access-Password") String key) {
+        if (!key.equals("akademiakodujestfajna")) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        if (user == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> userLocal = userRepository.findByUsername(user.getUsername());
+
+        if (userLocal.isPresent()) {
+            return new ResponseEntity("Username is not available!", HttpStatus.BAD_REQUEST);
+        }
+
+        userRepository.save(user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/user/{username}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity deteleUser(@RequestHeader("Access-Password") String key,
+                                     @PathVariable("username") String username) {
+        if (!key.equals("akademiakodujestfajna")) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> userLocal = userRepository.findByUsername(username);
+        if (!userLocal.isPresent()) {
+            return new ResponseEntity("User ist'n exist!", HttpStatus.BAD_REQUEST);
+        }
+        userRepository.delete(userLocal.get());
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/checklogin/{login}/{password}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String checkLogin(@PathVariable("login") String login,
+                             @PathVariable("password") String password) {
+        if ((login.isEmpty() && login == null) || (password.isEmpty() || password == null)) {
+            return "null except";
+        }
+        Optional<User> userLocal = userRepository.findByUsername(login);
+        if (userLocal.isPresent()) {
+            if (userLocal.get().getPassword().equals(password)) {
+                return "OK";
+            }
+        }
+        return "BAD";
+    }
+
+    @RequestMapping(value = "/tomasz/**", method = RequestMethod.GET)
+    @ResponseBody
+    public String test(HttpServletRequest servletRequest) throws Exception {
+        String path = (String) servletRequest.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        String[] split = path.split("/");
+        return "Pozostały path to: " + path;
+    }
+
+    @RequestMapping(value = "/tom/**", method = RequestMethod.GET)
+    @ResponseBody
+    public String test2(@RequestParam(value = "login", required = true) String login,
+                        @RequestParam("password") String password) {
+        return "Login: " + login;
+    }
 
 }
