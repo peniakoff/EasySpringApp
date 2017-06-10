@@ -38,7 +38,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("tomasz").password("mojehaslo").roles("ADMIN")
+                .withUser("tomasz").password("mypassword").roles("ADMIN") //it (and this all file) shouldn't to be commited but it's just for training
                 .and()
                     .withUser("test").password("test").roles("USER");
     }
