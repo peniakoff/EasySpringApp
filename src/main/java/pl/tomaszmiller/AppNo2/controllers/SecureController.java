@@ -55,7 +55,9 @@ public class SecureController {
         if (password.equals(user.get().getPassword())) {
             userInfo.setLogged(true);
             userInfo.setUser(user.get());
-            model.addAttribute("info", "Zalogowano się poprawnie!");
+//            model.addAttribute("info", "Zalogowano się poprawnie!");
+//            return "login";
+            return "redirect:/";
         }
         model.addAttribute("info", "Błędny login lub hasło!");
         return "login";
