@@ -1,11 +1,13 @@
 package pl.tomaszmiller.AppNo2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import pl.tomaszmiller.AppNo2.models.UserInfoBean;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import pl.tomaszmiller.AppNo2.models.User;
+import pl.tomaszmiller.AppNo2.models.UserInfo;
 
 /**
  * Created by Peniakoff on 10.06.2017.
@@ -14,20 +16,14 @@ import pl.tomaszmiller.AppNo2.models.UserInfoBean;
 public class SecureController {
 
     @Autowired
-    UserInfoBean userInfoBean;
+    UserInfo userInfo;
 
-    @GetMapping("/test/{message}")
+    @GetMapping("/checkuser")
     @ResponseBody
-    public String setUserInfo(@PathVariable("message") String message) {
-        userInfoBean.isUserLogged();
-        userInfoBean.setMessage(message);
-        return "Text is set for you: " + message;
-    }
+    public String checkUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    @GetMapping("/test")
-    @ResponseBody
-    public String getUserInfo(){
-        return "Your text is: " + userInfoBean.getMessage();
+        return "Czy user jest zalogowany? " + auth.getPrincipal();
     }
 
     @GetMapping("/")
@@ -37,6 +33,13 @@ public class SecureController {
 
     @GetMapping("/login")
     public String login() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String postLogin(@RequestParam("password") String password,
+                            @RequestParam("username") String username) {
+        System.out.println("Username: " + username + ", password: " + password);
         return "login";
     }
 
