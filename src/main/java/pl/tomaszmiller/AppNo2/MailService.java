@@ -22,10 +22,10 @@ public class MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true); //MimeMessageHelper - it's Spring's class; message creating is simpler
             helper.setTo(toWho);
-            helper.setFrom("hurchoci.wierch@gmail.com");
+            helper.setFrom(""); //set your e-mail address
             helper.setSubject(title);
             helper.setText(message, true);
-            helper.setReplyTo("hurchoci.wierch@gmail.com");
+            helper.setReplyTo("");  //set your e-mail address
         } catch (MessagingException e) {
             e.printStackTrace();
         }
