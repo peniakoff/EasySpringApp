@@ -161,8 +161,9 @@ public class MainController {
         context.setVariable("message", "Teraz mi wisisz " + cash + "!");
 
         String bodyHtml = templateEngine.process("mail", context);
-
-        mailService.sendMail("gefreiter@windowslive.com", bodyHtml, "Wiadomość testowa");
+        String EmailAddress = ""; // set your e-mail address
+        
+        mailService.sendMail(EmailAddress, bodyHtml, "Wiadomość testowa");
         return "Wysłano maila";
     }
 
