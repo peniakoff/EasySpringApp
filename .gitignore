@@ -27,3 +27,4 @@ nbdist/
 classes/
 src/main/resources/
 !/src/main/resources/templates/
+/out
