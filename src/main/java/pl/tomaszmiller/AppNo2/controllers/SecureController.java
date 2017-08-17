@@ -39,7 +39,7 @@ public class SecureController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
         if (userInfo.isLogged()) {
             return "redirect:/";
         }
@@ -50,12 +50,12 @@ public class SecureController {
     public String postLogin(@RequestParam("password") String password,
                             @RequestParam("username") String username,
                             Model model) {
-//        System.out.println("Username: " + username + ", password: " + password);
+        System.out.println("Username: " + username + ", password: " + password);
         Optional<User> user = userRepository.findByUsername(username);
         if (password.equals(user.get().getPassword())) {
             userInfo.setLogged(true);
             userInfo.setUser(user.get());
-//            model.addAttribute("info", "Zalogowano się poprawnie!");
+            model.addAttribute("info", "Zalogowano się poprawnie!");
 //            return "login";
             return "redirect:/";
         }

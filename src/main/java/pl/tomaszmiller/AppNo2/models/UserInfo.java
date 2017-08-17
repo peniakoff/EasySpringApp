@@ -36,11 +36,12 @@ public class UserInfo {
     /*
     Login with Spring Security, depracted!
      */
-//    public boolean isUserLogged() {
-//        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-//            return true;
-//        }
-//        return false;
-//    }
+    @Deprecated
+    public boolean isUserLogged() {
+        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+            return true;
+        }
+        return false;
+    }
 
 }

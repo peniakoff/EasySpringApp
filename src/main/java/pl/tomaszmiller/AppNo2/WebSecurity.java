@@ -20,29 +20,29 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/checkuser").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/administrator").hasRole("ADMIN")
-                .anyRequest().authenticated();
+            .antMatchers("/").permitAll()
+            .antMatchers("/checkuser").permitAll()
+            .antMatchers("/login").permitAll()
+            .antMatchers("/administrator").hasRole("ADMIN")
+            .anyRequest().authenticated();
+//            .and()
+//                .formLogin()
+//                .successHandler(loginHandler)
+//                .loginPage("/login")
+//                .permitAll()
 //                .and()
-//                    .formLogin()
-//                    .successHandler(loginHandler)
-//                    .loginPage("/login")
-//                    .permitAll()
-//                    .and()
-//                        .logout()
-//                        .permitAll();
+//                    .logout()
+//                    .permitAll();
         http.exceptionHandling().accessDeniedPage("/403");
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
-                .withUser("tomasz").password("mypassword").roles("ADMIN") //it (and this all file) shouldn't to be commited but it's just for training
-                .and()
-                    .withUser("test").password("test").roles("USER");
+            .inMemoryAuthentication()
+                .withUser("tomasz").password("mojehaslo1").roles("ADMIN") //it (and this all file) shouldn't to be commited but it's just for training
+            .and()
+                .withUser("user").password("test").roles("USER");
     }
 
 }
